@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Tag: {{ tag.name }}</h1>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Query Text</th>
+                <th>Description</th>
+                <th>Source</th>
+                <th>Tags</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for candidate in candidates %}
+            <tr>
+                <td style="text-align: left; width: 20%;">{{ candidate.text }}</td>
+                <td style="text-align: left; width: 40%;">{{ candidate.description }}</td>
+                <td style="text-align: left; width: 20%;"><a href="{{ candidate.source }}" target="_blank">source</a></td>
+                <td style="text-align: left; width: 20%;">
+                    {% for tag in candidate.tags %}
+                    <a href="{{ url_for('tag', tag_name=tag.name) }}">{{ tag.name }}</a>{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

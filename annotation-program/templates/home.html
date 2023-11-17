@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Welcome
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h1 class="display-4">Privacy Requirements Collection</h1>
+                <p class="lead">Welcome to the comprehensive collection of privacy requirements and design patterns</p>
+            </div>
+        </div>
+
+        {% for annotation in annotations_data %}
+            <div class="row mt-5">
+                <div class="col-12">
+                    <h2>{{ annotation.source }}</h2>
+                    <a target="_blank" href="{{ url_for('annotate', source=annotation.source) }}" class="btn btn-success mt-4">Start Annotation for {{ annotation.source }}</a>
+                    <br/>
+                    <br/>
+                    <div class="progress mt-4">
+                        {% set progress = annotation.done / annotation.total * 100 %}
+                        <div class="progress-bar" role="progressbar" 
+                            style="width: {{ progress|round(2) }}%;" 
+                            aria-valuenow="{{ progress|round(2) }}" 
+                            aria-valuemax="100">
+                            {{ progress|round(2) }}%
+                        </div>
+                    </div>
+                    <p class="mt-2">You've completed {{ annotation.done }} out of {{ annotation.total }} annotations for source "{{ annotation.source }}".</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
