@@ -3,8 +3,6 @@ import json, pickle
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.model_selection import cross_val_score
-from sklearn import svm
-from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, GradientBoostingClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import StratifiedKFold
@@ -141,23 +139,11 @@ def test_cross_val():
     train_data = count_vect.fit_transform(text)
 
 
-    # clf1 = MultinomialNB()
-    clf2 = svm.SVC()
-    # clf2 = svm.SVC(probability=True, random_state=0)
-    # clf3 = RandomForestClassifier(max_depth=5, n_estimators=10, max_features=1)
-    # clf4 = AdaBoostClassifier()
-    # clf5 = GradientBoostingClassifier(n_estimators=100, learning_rate=1.0, max_depth=1, random_state=0)
+    clf1 = MultinomialNB()
 
-    # print ("Naive Bayes:", np.mean(cross_val_score(clf1, train_data, label, scoring='f1_macro',cv=5))) 
-    print ("SVM:", np.mean(cross_val_score(clf2, train_data, label, scoring='f1_macro',cv=5))) 
-    # print ("Random Forest:", np.mean(cross_val_score(clf3, train_data, label, scoring='f1_macro',cv=5))) 
-    # print ("Ada Boost:", np.mean(cross_val_score(clf4, train_data, label, scoring='f1_macro',cv=5)))
-    # print ("Gradient Boost:", np.mean(cross_val_score(clf5, train_data, label, scoring='f1_macro',cv=5)))
+    print ("Naive Bayes:", np.mean(cross_val_score(clf1, train_data, label, scoring='f1_macro',cv=5))) 
 
 def make_classifier():
-    # NB is better at binary
-    # SVM is better at multiclass
-
     text, label = get_data_from_file(with_aug=True, combine_test=False, binary="multi")
 
     count_vect = CountVectorizer(analyzer="word", ngram_range=(1,1))
@@ -167,7 +153,6 @@ def make_classifier():
     pickle.dump(count_vect, open(filename, 'wb'))
 
     clf1 = MultinomialNB()
-    # clf1 = svm.SVC(probability=True, random_state=0)
     clf1.fit(train_data, label)
 
     filename = 'multi_nb_model.sav'
@@ -359,10 +344,7 @@ for fold_num, (train_data, test_data, train_labels, test_labels) in enumerate(fo
     test_filename = f'test_patterns_req_v2_fold_{fold_num}.json'
     export_to_json(test_data, test_filename)
 
-
-
     
-# nb perform better than svm on propan data
 # test_cross_val()
 # make_classifier()
 # test_classifier()
